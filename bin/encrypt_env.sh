@@ -3,6 +3,9 @@
 # for node projects. The derived products include the encrypted
 # dotenv file
 
+PATH_TO_ENCRYPTED=.env.${NODE_ENV}.encrypted
+PATH_TO_DECRYPTED=.env.${NODE_ENV}.decrypted
+
 # check with prerequsites
 if [ -z "${NODE_ENV}" ]; then
   echo 'info: NODE_ENV is not set. To skip this prompt, execute your script with NODE_ENV'
@@ -28,4 +31,4 @@ if [ -z "${ENV_PASSWORD}" ]; then
 fi
 
 # main
-openssl enc -aes-256-cbc -in .env.${NODE_ENV}.decrypted -out .env.${NODE_ENV}.encrypted -a -salt -k ${ENV_PASSWORD}
+openssl enc -aes-256-cbc -in ${PATH_TO_DECRYPTED} -out ${PATH_TO_ENCRYPTED} -a -salt -k ${ENV_PASSWORD}

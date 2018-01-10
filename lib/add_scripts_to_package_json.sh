@@ -11,7 +11,7 @@ function _does_field_exist() {
   QUERY_FIELD_VALUE=${_array[@]:2:$_len}
 
   # jq ".${QUERY_FIELD_KEY} | contains(\"${QUERY_FIELD_VALUE}\")" "${PATH_TO_PACKAGE_JSON}" 2>&1 1>/dev/null
-  cat "${PATH_TO_PACKAGE_JSON}" | jq  ".${QUERY_FIELD_KEY} | contains(\"${QUERY_FIELD_VALUE}\")" 2>&1 1>/dev/null
+  cat "${PATH_TO_PACKAGE_JSON}" | jq  ".${QUERY_FIELD_KEY} | contains(\"${QUERY_FIELD_VALUE}\")?" 2>&1 1>/dev/null
   # cat "${PATH_TO_PACKAGE_JSON}" | jq -n ".${QUERY_FIELD_KEY}"
   return $?
 }

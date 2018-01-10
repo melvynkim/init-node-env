@@ -1,5 +1,8 @@
 {
   "author": "Melvyn Kim <melvynkim@gmail.com>",
+  "bin": {
+    "init-node-env": "install.js"
+  },
   "bugs": {
     "url": "https://github.com/melvynkim/init-node-env/issues"
   },
@@ -9,7 +12,7 @@
   },
   "description": "Initialize production environment setup for node project.",
   "engines": {
-    "node": ">=4"
+    "node": ">=8.9.4"
   },
   "license": "MIT",
   "main": "install.js",
@@ -19,5 +22,5 @@
     "type": "git",
     "url": "https://github.com/melvynkim/init-node-env"
   },
-  "version": "0.0.1"
+  "version": "0.1.0"
 }
