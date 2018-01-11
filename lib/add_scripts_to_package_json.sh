@@ -7,19 +7,33 @@ PATH_TO_PACKAGE_JSON_TEMP="$1/package.json.temp"
 function _does_field_exist() {
   _array=($@)
   _len=${#_array[@]}
-  QUERY_FIELD_KEY=${1}[\"${2}\"]
+  QUERY_FIELD_KEY_PARENT=$1
+  QUERY_FIELD_KEY_CHILD=$2
   QUERY_FIELD_VALUE=${_array[@]:2:$_len}
+  field_exists=
 
-  # jq ".${QUERY_FIELD_KEY} | contains(\"${QUERY_FIELD_VALUE}\")" "${PATH_TO_PACKAGE_JSON}" 2>&1 1>/dev/null
-  cat "${PATH_TO_PACKAGE_JSON}" | jq  ".${QUERY_FIELD_KEY} | contains(\"${QUERY_FIELD_VALUE}\")?" 2>&1 1>/dev/null
-  # cat "${PATH_TO_PACKAGE_JSON}" | jq -n ".${QUERY_FIELD_KEY}"
-  return $?
+  # check if field key exists
+  key_exists=$(cat "${PATH_TO_PACKAGE_JSON}" |
+    JQ ".${QUERY_FIELD_KEY_PARENT}" |
+    JQ ".\"${QUERY_FIELD_KEY_CHILD}\" != null")
+  if [ "${key_exists}" = true ]; then
+    field_exists=$(cat "${PATH_TO_PACKAGE_JSON}" |
+      JQ ".${QUERY_FIELD_KEY_PARENT}" |
+      JQ ".\"${QUERY_FIELD_KEY_CHILD}\"" |
+      JQ "contains(\"${QUERY_FIELD_VALUE}\")")
+  fi
+
+  if [ "${field_exists}" = true ]; then
+    return 0
+  else
+    return 1
+  fi
 }
 
 function _create_key_with_value() {
   _array=($@)
   _len=${#_array[@]}
-  QUERY_FIELD_KEY=${1}[\"${2}\"]
+  QUERY_FIELD_KEY="$1.\"$2\""
   QUERY_FIELD_VALUE=${_array[@]:2:$_len}
 
   JQ \
@@ -33,7 +47,7 @@ function _create_key_with_value() {
 function _add_value_to_key() {
   _array=($@)
   _len=${#_array[@]}
-  QUERY_FIELD_KEY=${1}[\"${2}\"]
+  QUERY_FIELD_KEY="$1.\"$2\""
   QUERY_FIELD_VALUE=${_array[@]:2:$_len}
   DELIMITER=" && "
 
